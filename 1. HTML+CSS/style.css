@@ -1,0 +1,80 @@
+body{
+	margin: 0;
+	padding: 0;
+	background-color: #1a355b;
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+p{
+	margin: 0;
+	padding: 0;
+}
+.card{
+	width: 235px;
+}
+.cardHeader{
+	background-color: #909558;
+	color: #fff;
+	display: flex;
+}
+.hText{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background-color: #a5ab60;
+	width: 180px;
+	padding-left: 15px;
+    padding-right: 10px
+}
+.cardContent{
+    display: flex;
+    align-items: flex-end;
+	background-color: #fff;
+	padding: 20px 2px 0px 20px;
+}
+.cardContent p{
+	margin-bottom: 5px;
+}
+.info{
+	display: flex;
+    flex-flow: wrap;
+	margin-bottom: 10px;
+}
+.item{
+	display: flex;
+	align-items: center;
+	width: 90px;
+}
+.item p{
+	font-size: 10px;
+	margin-left: 5px;
+}
+.icon{
+	background: url(s-icon.png) no-repeat;
+	background-position: -58px -2px;
+	width: 30px;
+	height: 30px;
+}
+.date{
+	width: 18px;
+	background-position-x: 0px;
+}
+.avatar{
+	width: 21px;
+	background-position-x: -90px;
+}
+.precent{
+	width: 21px;
+	background-position-x: -18px;
+}
+.users{
+	width: 18px;
+	background-position-x: -40px;
+}
+.clip{
+	width: 30px;
+	background-position-x: -124px;
+}
