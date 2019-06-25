@@ -2,18 +2,38 @@ window.onload = function (){
 	var addBtn = document.getElementById('addBtn')
 	var valueInp = document.getElementById('valueInp')
 	var listRequests = document.getElementById('listRequests')
+	var tagList = document.getElementById('tagList')
 	addBtn.onclick = () => addToList(listRequests, valueInp)
+	valueInp.addEventListener("focus", function() {
+		tagList.style.display = 'flex'
+  	}, true);
+  	valueInp.addEventListener("blur", function() {
+		tagList.style.display = 'none'
+	}, true);
 }
 const addToList = (list, input) => {
 	const id = listData.length + 1
 	const value = input.value
-	const newLi = document.createElement('li')
-	newLi.innerHTML = value;
-	newLi.id = id
-	newLi.onclick = () => editRequest(id, input)
-	list.insertBefore(newLi, list.children[0])
-	listData.push({ id: id, text: value, tags: getTagsString(value)})
-	input.value = ''
+	console.log()
+	if(value){
+		const newLi = document.createElement('li')
+		newLi.innerHTML = value;
+		newLi.id = id
+		newLi.onclick = () => editRequest(id, input)
+		list.insertBefore(newLi, list.children[0])
+		const listItemTags = getTagsString(value)
+		for(item of listItemTags){
+			if(allTagsList.indexOf(item) === -1) allTagsList.push(item)
+		}
+		for(item of listItemTags){
+			setTagDropDownList(item)
+		}
+		console.log(allTagsList)
+		input.autocomplete = allTagsList
+		listData.push({ id: id, text: value, tags: listItemTags})
+		console.log(listData)
+		input.value = ''
+	}
 }
 const editRequest = (id, input) => {
 	const li = document.getElementById(id)
@@ -39,7 +59,7 @@ const getTagsString = (str) => {
 	str += ' '
 	const trgStart = '#'
 	const trgEnd = ' '
-	let posStart = 0
+	let posStart = -1
 	let posEnd = 0
 	let tags = []
 	while((posStart = str.indexOf(trgStart, posStart + 1)) != -1){
@@ -48,5 +68,10 @@ const getTagsString = (str) => {
 	}
 	return tags
 }
-
+const setTagDropDownList = (tag) => {
+	const p = document.createElement('p')
+	p.innerHTML = tag
+	tagList.insertBefore(p, tagList.children[0])
+}
+var allTagsList = []
 var listData = []
