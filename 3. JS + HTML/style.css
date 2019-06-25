@@ -57,12 +57,19 @@ article p{
 	margin: 0;
 	padding: 0;
 }
-ul{
+ol{
+	width: 100%;
 	margin: 0;
 	padding: 0;
 }
 li{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 	cursor: pointer;
 	margin-bottom: 10px;
 	list-style-type: none;
+}
+li:hover{
+	background-color: rgba(0, 0, 0, 0.2);
 }

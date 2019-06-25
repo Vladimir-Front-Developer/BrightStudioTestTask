@@ -1,7 +1,7 @@
 window.onload = function (){
-	const addBtn = document.getElementById('addBtn')
-	const valueInp = document.getElementById('valueInp')
-	const listRequests = document.getElementById('listRequests')
+	var addBtn = document.getElementById('addBtn')
+	var valueInp = document.getElementById('valueInp')
+	var listRequests = document.getElementById('listRequests')
 	addBtn.onclick = () => addToList(listRequests, valueInp)
 }
 const addToList = (list, input) => {
@@ -10,20 +10,43 @@ const addToList = (list, input) => {
 	const newLi = document.createElement('li')
 	newLi.innerHTML = value;
 	newLi.id = id
+	newLi.onclick = () => editRequest(id, input)
 	list.insertBefore(newLi, list.children[0])
-	listData.push({ id: id, text: value })
+	listData.push({ id: id, text: value, tags: getTagsString(value)})
+	input.value = ''
 }
-var listData = [
-	{
-		id: '1',
-		text: '11-12 июля в Санкт-Петербурге состоится конференция по распределенным системам Hydra 2019.'
-	},
-	{
-		id: '2',
-		text: '#Royal_Arts #Dark_Souls #Bloodborne by Banished Shadow Dark Souls и Bloodborne в стиле аниме.'
-	},
-	{
-		id: '3',
-		text: '#Royal_comics by fredrik k.t. andersson'
+const editRequest = (id, input) => {
+	const li = document.getElementById(id)
+	let text = li.innerHTML
+	input.value = text
+	addBtn.innerHTML = 'Применить изминения'
+	addBtn.onclick = () => changeValueRequest(li, input, id)
+}
+const changeValueRequest = (li, input, id) => {
+	li.innerHTML = input.value
+	listData.find(el => {
+		if(el.id === id){
+			el.text = input.value
+			el.tags = getTagsString(input.value)
+		}
+	})
+	console.log(listData)
+	addBtn.innerHTML = 'Добавить заметку'
+	addBtn.onclick = () => addToList(listRequests, valueInp)
+	input.value = ''
+}
+const getTagsString = (str) => {
+	str += ' '
+	const trgStart = '#'
+	const trgEnd = ' '
+	let posStart = 0
+	let posEnd = 0
+	let tags = []
+	while((posStart = str.indexOf(trgStart, posStart + 1)) != -1){
+		posEnd = str.indexOf(trgEnd, posStart)
+		tags.push(str.slice(posStart, posEnd))
 	}
-]
+	return tags
+}
+
+var listData = []
