@@ -1,61 +1,62 @@
+var noteDataList = []
+var tagDataList = []
+
 window.onload = function (){
-	var addBtn = document.getElementById('addBtn')
-	var valueInp = document.getElementById('valueInp')
-	var listRequests = document.getElementById('listRequests')
+	var entryFieldNotes = document.getElementById('entryFieldNotes')
+	var addListBtn = document.getElementById('addListBtn')
+	var listNotes = document.getElementById('listNotes')
 	var tagList = document.getElementById('tagList')
-	addBtn.onclick = () => addToList(listRequests, valueInp)
-	valueInp.addEventListener("focus", function() {
-		tagList.style.display = 'flex'
-  	}, true);
-  	valueInp.addEventListener("blur", function() {
-		tagList.style.display = 'none'
-	}, true);
+	entryFieldNotes.addEventListener("focus", function() { tagList.style.display = 'flex' }, true);
+  	entryFieldNotes.addEventListener("blur", function() { tagList.style.display = 'none' }, true);
+	addListBtn.onclick = () => addNotesToList(listNotes)
 }
-const addToList = (list, input) => {
-	const id = listData.length + 1
-	const value = input.value
-	console.log()
+
+const addNotesToList = (list) => {
+	const id = noteDataList.length + 1
+	const value = entryFieldNotes.value
 	if(value){
-		const newLi = document.createElement('li')
-		newLi.innerHTML = value;
-		newLi.id = id
-		newLi.onclick = () => editRequest(id, input)
-		list.insertBefore(newLi, list.children[0])
-		const listItemTags = getTagsString(value)
-		for(item of listItemTags){
-			if(allTagsList.indexOf(item) === -1) allTagsList.push(item)
+		let itemNoteTags = getWordFromString(value)
+		noteDataList.push({ id: id, text: value, tags: itemNoteTags})
+		list.insertBefore(creatingNote(id, value), list.children[0])
+		for(item of itemNoteTags){
+			if(tagDataList.indexOf(item) === -1) {
+				tagDataList.push(item)
+				let p = document.createElement('p')
+				p.innerHTML = item
+				tagList.insertBefore(p, tagList.children[0])
+			}
 		}
-		for(item of listItemTags){
-			setTagDropDownList(item)
-		}
-		console.log(allTagsList)
-		input.autocomplete = allTagsList
-		listData.push({ id: id, text: value, tags: listItemTags})
-		console.log(listData)
-		input.value = ''
+		entryFieldNotes.value = ''
 	}
+	console.log(noteDataList)
+	console.log(tagDataList)
 }
-const editRequest = (id, input) => {
-	const li = document.getElementById(id)
-	let text = li.innerHTML
-	input.value = text
-	addBtn.innerHTML = 'Применить изминения'
-	addBtn.onclick = () => changeValueRequest(li, input, id)
+
+const creatingNote = (id, value) => {
+	const newLi = document.createElement('li')
+	newLi.id = id
+	newLi.innerHTML = value
+	newLi.onclick = () => {
+		entryFieldNotes.value = value
+		addListBtn.innerHTML = 'Применить изминения'
+		addListBtn.onclick = () => applyChangeNotes(id, newLi)
+	}
+	return newLi
 }
-const changeValueRequest = (li, input, id) => {
-	li.innerHTML = input.value
-	listData.find(el => {
+
+const applyChangeNotes = (id, li) => {
+	noteDataList.find(el => {
 		if(el.id === id){
-			el.text = input.value
-			el.tags = getTagsString(input.value)
-		}
+			el.text = entryFieldNotes.value
+			el.tags = getWordFromString(entryFieldNotes.value) }
 	})
-	console.log(listData)
-	addBtn.innerHTML = 'Добавить заметку'
-	addBtn.onclick = () => addToList(listRequests, valueInp)
-	input.value = ''
+	li.innerHTML = entryFieldNotes.value
+	addListBtn.innerHTML = 'Добавить заметку'
+	addListBtn.onclick = () => applyChangeNotes(noteDataList, listNotes)
+	entryFieldNotes.value = ''
 }
-const getTagsString = (str) => {
+
+const getWordFromString = (str) => {
 	str += ' '
 	const trgStart = '#'
 	const trgEnd = ' '
@@ -68,10 +69,3 @@ const getTagsString = (str) => {
 	}
 	return tags
 }
-const setTagDropDownList = (tag) => {
-	const p = document.createElement('p')
-	p.innerHTML = tag
-	tagList.insertBefore(p, tagList.children[0])
-}
-var allTagsList = []
-var listData = []
