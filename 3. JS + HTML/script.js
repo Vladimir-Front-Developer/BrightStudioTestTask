@@ -14,31 +14,36 @@ window.onload = function (){
 const addNotesToList = (list) => {
 	const id = noteDataList.length + 1
 	const value = entryFieldNotes.value
+	console.log(value)
 	if(value){
-		let itemNoteTags = getWordFromString(value)
+		let itemNoteTags = addTagList(value)
 		noteDataList.push({ id: id, text: value, tags: itemNoteTags})
 		list.insertBefore(creatingNote(id, value), list.children[0])
-		for(item of itemNoteTags){
-			if(tagDataList.indexOf(item) === -1) {
-				tagDataList.push(item)
-				let p = document.createElement('p')
-				p.innerHTML = item
-				tagList.insertBefore(p, tagList.children[0])
-			}
-		}
 		entryFieldNotes.value = ''
 	}
-	console.log(noteDataList)
-	console.log(tagDataList)
+}
+
+const addTagList = (value) => {
+	let noteTags = getWordFromString(value)
+	for(item of noteTags){
+		if(tagDataList.indexOf(item) === -1) {
+			tagDataList.push(item)
+			let p = document.createElement('p')
+			p.innerText = item
+			tagList.insertBefore(p, tagList.children[0])
+		}
+	}
+	return noteTags
 }
 
 const creatingNote = (id, value) => {
 	const newLi = document.createElement('li')
 	newLi.id = id
-	newLi.innerHTML = value
-	newLi.onclick = () => {
+	newLi.innerText = value
+	newLi.onclick = (item) => {
+		value = item.srcElement.innerText
 		entryFieldNotes.value = value
-		addListBtn.innerHTML = 'Применить изминения'
+		addListBtn.innerText = 'Применить изминения'
 		addListBtn.onclick = () => applyChangeNotes(id, newLi)
 	}
 	return newLi
@@ -48,11 +53,11 @@ const applyChangeNotes = (id, li) => {
 	noteDataList.find(el => {
 		if(el.id === id){
 			el.text = entryFieldNotes.value
-			el.tags = getWordFromString(entryFieldNotes.value) }
+			el.tags = addTagList(entryFieldNotes.value) }
 	})
-	li.innerHTML = entryFieldNotes.value
-	addListBtn.innerHTML = 'Добавить заметку'
-	addListBtn.onclick = () => applyChangeNotes(noteDataList, listNotes)
+	li.innerText = entryFieldNotes.value
+	addListBtn.innerText = 'Добавить заметку'
+	addListBtn.onclick = () => addNotesToList(listNotes)
 	entryFieldNotes.value = ''
 }
 
