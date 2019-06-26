@@ -10,8 +10,7 @@ window.onload = function (){
   	entryFieldNotes.onfocus = () => tagList.style.display = 'flex'
   	entryFieldNotes.onblur = () => {
   		tagList.style.display = 'none'
-		showAllTags()
-  	}
+		showAllTags() }
 	addListBtn.onclick = () => addNotesToList(listNotes)
 	entryFieldNotes.onkeyup = (item) => findListTags(item.srcElement.value)
 }
@@ -44,12 +43,8 @@ const showAllTags = () => {
 	}
 }
 
-const visibilityNotes = (tags) => {
-	
-}
-
 const addNotesToList = (list) => {
-	const id = noteDataList.length + 1
+	const id = 'note' + noteDataList.length
 	const value = entryFieldNotes.value
 	console.log(value)
 	if(value){
