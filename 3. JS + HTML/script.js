@@ -6,9 +6,46 @@ window.onload = function (){
 	var addListBtn = document.getElementById('addListBtn')
 	var listNotes = document.getElementById('listNotes')
 	var tagList = document.getElementById('tagList')
-	entryFieldNotes.addEventListener("focus", function() { tagList.style.display = 'flex' }, true);
-  	entryFieldNotes.addEventListener("blur", function() { tagList.style.display = 'none' }, true);
+
+  	entryFieldNotes.onfocus = () => tagList.style.display = 'flex'
+  	entryFieldNotes.onblur = () => {
+  		tagList.style.display = 'none'
+		showAllTags()
+  	}
 	addListBtn.onclick = () => addNotesToList(listNotes)
+	entryFieldNotes.onkeyup = (item) => findListTags(item.srcElement.value)
+}
+
+const findListTags = (value) => {
+	if(value){
+		let tags = getWordFromString(value)
+		if(tags.length) visibilityTags(tags)
+	} else showAllTags()
+}
+
+const visibilityTags = (tags) => {
+	for(let idx in tagDataList){
+		let p = document.getElementById(idx)
+		p.style.display = 'none'
+	}
+	for(let tag of tags){
+		let idx = tagDataList.indexOf(tag)
+		if(idx != -1){
+			let p = document.getElementById(idx)
+			p.style.display = 'block'
+		}
+	}
+}
+
+const showAllTags = () => {
+	for(let idx in tagDataList){
+		let p = document.getElementById(idx)
+		p.style.display = 'block'
+	}
+}
+
+const visibilityNotes = (tags) => {
+	
 }
 
 const addNotesToList = (list) => {
@@ -27,8 +64,10 @@ const addTagList = (value) => {
 	let noteTags = getWordFromString(value)
 	for(item of noteTags){
 		if(tagDataList.indexOf(item) === -1) {
+			let idTag = tagDataList.length
 			tagDataList.push(item)
 			let p = document.createElement('p')
+			p.id = idTag
 			p.innerText = item
 			tagList.insertBefore(p, tagList.children[0])
 		}
